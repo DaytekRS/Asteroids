@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class HealthComponents : MonoBehaviour
 {
-    [SerializeField] private  float MaxHealth = 3f;
-    private float Health;
-        
+    [SerializeField] private int MaxHealth = 3;
+    private int Health;
+
     void Awake()
     {
         Health = MaxHealth;
     }
 
-    public void SetHealth(float newHealth)
+    public void SetHealth(int newHealth)
     {
         Health = Mathf.Clamp(newHealth, 0, MaxHealth);
     }
 
-    public float GetHealth()
+    public int GetHealth()
     {
         return Health;
     }
-    
+
     public void DecHealth()
     {
         Health = Mathf.Clamp(Health - 1, 0, MaxHealth);
     }
-    
+
     public void IncHealth()
     {
         Health = Mathf.Clamp(Health + 1, 0, MaxHealth);
@@ -34,7 +34,6 @@ public class HealthComponents : MonoBehaviour
 
     public bool IsDead()
     {
-        return Health.Equals(0f);
+        return Health == 0;
     }
-
 }

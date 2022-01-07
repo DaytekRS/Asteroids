@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private  float _speedForward = 10f;
-    [SerializeField] private  float _speedRotate = 400f;
-    [SerializeField]  private HealthComponents _healthComponents;
+    [SerializeField] private float _speedForward = 10f;
+    [SerializeField] private float _speedRotate = 400f;
+    [SerializeField] private HealthComponents _healthComponents;
     private bool _controlOnlyKey = true;
     private Vector3 _lastMousePosition;
     private Rect _CanvasRect;
@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
             PlayerDead();
             return;
         }
+
+        transform.localPosition = AutoTeleport.Teleport(transform.localPosition, _CanvasRect);
         
         if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
         if (Input.GetButton("MoveRight")) MovePlayer("MoveRight");
