@@ -10,9 +10,17 @@ public class Player : MonoBehaviour
     [SerializeField] private float speedRotate = 400f;
     private bool _controlOnlyKey = true;
     private Vector3 _lastMousePosition;
+    private Rect _CanvasRect;
+
+    private void Awake()
+    {
+        _CanvasRect = transform.parent.GetComponent<RectTransform>().rect;
+    }
 
     private void Update()
     {
+        transform.localPosition = AutoTeleport.Teleport(transform.localPosition, _CanvasRect);
+
         if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
         if (Input.GetButton("MoveRight")) MovePlayer("MoveRight");
         if (!_lastMousePosition.Equals(Input.mousePosition))
@@ -49,10 +57,10 @@ public class Player : MonoBehaviour
                     Time.deltaTime * speedForward);
                 break;
             default:
-                Vector3 temp = transform.eulerAngles;
+                dir = transform.eulerAngles;
                 _controlOnlyKey = true;
-                temp.z += Input.GetAxis(action) > 0 ? -Time.deltaTime * speedRotate : Time.deltaTime * speedRotate;
-                transform.eulerAngles = temp;
+                dir.z += Input.GetAxis(action) > 0 ? -Time.deltaTime * speedRotate : Time.deltaTime * speedRotate;
+                transform.eulerAngles = dir;
                 break;
         }
     }
