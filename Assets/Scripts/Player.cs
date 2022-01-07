@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        transform.localPosition = AutoTeleport.Teleport(transform.localPosition, _CanvasRect);
 
         if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
         if (Input.GetButton("MoveRight")) MovePlayer("MoveRight");
@@ -34,6 +33,7 @@ public class Player : MonoBehaviour
 
     private void RotatePlayerOnMouse()
     {
+        if (PauseMenu.GameIsPause) return;
         var mousePosition = Input.mousePosition;
         mousePosition =
             Camera.main.ScreenToWorldPoint(mousePosition); //mouse position from screen coordinates to world coordinates
