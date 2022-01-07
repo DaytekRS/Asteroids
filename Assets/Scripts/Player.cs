@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float speedForward = 10f;
-    [SerializeField] private float speedRotate = 400f;
+    [SerializeField] private  float _speedForward = 10f;
+    [SerializeField] private  float _speedRotate = 400f;
+    [SerializeField]  private HealthComponents _healthComponents;
     private bool _controlOnlyKey = true;
     private Vector3 _lastMousePosition;
     private Rect _CanvasRect;
@@ -19,7 +20,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-
+        if (_healthComponents.IsDead())
+        {
+            PlayerDead();
+            return;
+        }
+        
         if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
         if (Input.GetButton("MoveRight")) MovePlayer("MoveRight");
         if (!_lastMousePosition.Equals(Input.mousePosition))
@@ -54,14 +60,24 @@ public class Player : MonoBehaviour
             case "MoveForward":
                 dir = transform.up * Input.GetAxis(action);
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + dir,
-                    Time.deltaTime * speedForward);
+                    Time.deltaTime * _speedForward);
                 break;
             default:
                 dir = transform.eulerAngles;
                 _controlOnlyKey = true;
-                dir.z += Input.GetAxis(action) > 0 ? -Time.deltaTime * speedRotate : Time.deltaTime * speedRotate;
+                dir.z += Input.GetAxis(action) > 0 ? -Time.deltaTime * _speedRotate : Time.deltaTime * _speedRotate;
                 transform.eulerAngles = dir;
                 break;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D obj)
+    {
+        if (obj.gameObject.tag.Equals("Asteroid")) _healthComponents.DecHealth();
+    }
+
+    private void PlayerDead()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
