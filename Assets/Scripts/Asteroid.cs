@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _speedMax = 5f;
+    [SerializeField] private float _speedMin = 3f;
     private Vector3 ForwardVector;
     private Rect _CanvasRect;
+    private float _speed;
 
     private void Start()
     {
+        _speed = Random.Range(_speedMin, _speedMax);
         _CanvasRect = transform.parent.GetComponent<RectTransform>().rect;
         
         ForwardVector = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);

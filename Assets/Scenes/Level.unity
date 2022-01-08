@@ -414,8 +414,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &728332719
-RectTransform:
+--- !u!4 &728332719
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -428,11 +428,6 @@ RectTransform:
   m_Father: {fileID: 1748898104}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &728332720
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -744,8 +739,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1748898104}
   - component: {fileID: 1748898105}
+  - component: {fileID: 1748898106}
   m_Layer: 0
-  m_Name: Meteorit
+  m_Name: Asteroid
   m_TagString: Asteroid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -764,7 +760,7 @@ Transform:
   m_Children:
   - {fileID: 728332719}
   m_Father: {fileID: 1754049842}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1748898105
 BoxCollider2D:
@@ -779,7 +775,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.59490204, y: 4.560854}
+  m_Offset: {x: -0.6, y: 5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -790,8 +786,22 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 79.92258, y: 72.78386}
+  m_Size: {x: 80, y: 70}
   m_EdgeRadius: 0
+--- !u!114 &1748898106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748898103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e746b472f6f5b34f9eca063bf57aa4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speedMax: 5
+  _speedMin: 3
 --- !u!1 &1754049838
 GameObject:
   m_ObjectHideFlags: 0
@@ -884,8 +894,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1429876904}
-  - {fileID: 1770336799}
   - {fileID: 1748898104}
+  - {fileID: 1770336799}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1060,7 +1070,7 @@ Transform:
   - {fileID: 1810526426}
   - {fileID: 1264667546}
   m_Father: {fileID: 1754049842}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1770336800
 Rigidbody2D:
