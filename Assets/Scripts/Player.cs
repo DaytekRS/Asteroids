@@ -27,9 +27,10 @@ public class Player : MonoBehaviour
         }
 
         transform.localPosition = AutoTeleport.Teleport(transform.localPosition, _CanvasRect);
-        
+
         if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
         if (Input.GetButton("MoveRight")) MovePlayer("MoveRight");
+        if (Input.GetMouseButtonDown(0)) GetComponent<BaseWeaponComponent>().FireStart();
         if (!_lastMousePosition.Equals(Input.mousePosition))
         {
             _controlOnlyKey = false;

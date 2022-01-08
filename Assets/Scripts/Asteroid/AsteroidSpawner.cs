@@ -13,7 +13,7 @@ public class AsteroidSpawner : MonoBehaviour
         Transform canvas = AutoTeleport.FindGameCanvas(transform);
         if (canvas) _CanvasRect = canvas.GetComponent<RectTransform>().rect;
     }
-    
+
     private void Update()
     {
         while (transform.childCount != _minCountAsteroid)
@@ -25,7 +25,6 @@ public class AsteroidSpawner : MonoBehaviour
 
     private Vector3 RandomLocalPosition()
     {
-        
         int randomAxis = Random.Range(0, 1);
         float randomValue = randomAxis == 0
             ? Random.Range(_CanvasRect.yMin, _CanvasRect.yMax)

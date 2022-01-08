@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Asteroid
   - GameCanvas
+  - Bullet
   layers:
   - Default
   - TransparentFX

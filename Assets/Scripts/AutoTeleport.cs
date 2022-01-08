@@ -8,21 +8,21 @@ public class AutoTeleport : MonoBehaviour
     {
         if (position.x < rectTeleport.x) position.x += rectTeleport.width;
         else if (position.x > rectTeleport.xMax) position.x -= rectTeleport.width;
-        
+
         if (position.y < rectTeleport.y) position.y += rectTeleport.height;
-        else if (position.y > rectTeleport.yMax)position.y -= rectTeleport.height;
-        
+        else if (position.y > rectTeleport.yMax) position.y -= rectTeleport.height;
+
         return position;
     }
-    
+
     public static Transform FindGameCanvas(Transform obj)
     {
         Transform canvas = obj.parent;
-        while (canvas&& !canvas.tag.Equals("GameCanvas") )
+        while (canvas && !canvas.tag.Equals("GameCanvas"))
         {
             canvas = canvas.parent;
         }
-        
+
         return canvas;
     }
 }

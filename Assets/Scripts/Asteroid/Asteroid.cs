@@ -12,12 +12,12 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private AsteroidData[] _asteroidDatas = { };
     [SerializeField] private AsteroidType _asteroidType = AsteroidType.Big;
     [SerializeField] private bool _autoGenerate = true;
-    
+
     private Vector3 ForwardVector = Vector3.zero;
     private Rect _CanvasRect;
     private float _speed;
     private AsteroidData _currentAsteroidData;
-    
+
     private void Start()
     {
         if (_autoGenerate) AutoGenerateAsteroid();
@@ -53,9 +53,13 @@ public class Asteroid : MonoBehaviour
         GetComponent<CapsuleCollider2D>().size = sprite.textureRect.size;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
- 
+        print(collider);
+        if (collider.tag.Equals("Bullet"))
+        {
+            Destroy(transform.gameObject);
+        }
     }
 
     private void AutoGenerateAsteroid()
@@ -63,5 +67,4 @@ public class Asteroid : MonoBehaviour
         SetRandomAsteroid();
         ForwardVector = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
     }
-    
 }
