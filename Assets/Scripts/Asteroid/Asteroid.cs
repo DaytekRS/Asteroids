@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -12,11 +13,14 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private AsteroidData[] _asteroidDatas = { };
     [SerializeField] private AsteroidType _asteroidType = AsteroidType.Big;
     [SerializeField] private bool _autoGenerate = true;
+    [SerializeField] private float _hitAnimDuration = 0.3f;
+    [SerializeField] private AudioClip hitSound;
 
     private Vector3 ForwardVector = Vector3.zero;
     private Rect _CanvasRect;
     private float _speed;
     private AsteroidData _currentAsteroidData;
+
 
     private void Start()
     {
@@ -58,8 +62,22 @@ public class Asteroid : MonoBehaviour
         print(collider);
         if (collider.tag.Equals("Bullet"))
         {
-            Destroy(transform.gameObject);
+            GetComponent<Animator>().SetBool("HaveHit", true);
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.clip = hitSound;
+            audioSource.Play();
+            GetComponent<HealthComponents>().DecHealth();
+            Invoke("EndHitAnim", _hitAnimDuration);
+            if (GetComponent<HealthComponents>().IsDead())
+            {
+                Destroy(gameObject);
+            }
         }
+    }
+
+    private void EndHitAnim()
+    {
+        GetComponent<Animator>().SetBool("HaveHit", false);
     }
 
     private void AutoGenerateAsteroid()

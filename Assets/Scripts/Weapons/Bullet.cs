@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     {
         Image image = GetComponent<Image>();
         image.sprite = _BulletSprite;
-
+        
         RectTransform recTransform = GetComponent<RectTransform>();
         recTransform.sizeDelta = _BulletSprite.textureRect.size;
 
