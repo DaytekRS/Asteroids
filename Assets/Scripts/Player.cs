@@ -9,13 +9,39 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speedForward = 10f;
     [SerializeField] private float _speedRotate = 400f;
     [SerializeField] private HealthComponents _healthComponents;
+    [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private float _deadAnimDuration = 0.3f;
     private bool _controlOnlyKey = true;
     private Vector3 _lastMousePosition;
     private Rect _CanvasRect;
 
+    private GameObject explositionGO;
+
     private void Start()
     {
         _CanvasRect = transform.parent.GetComponent<RectTransform>().rect;
+    }
+
+    
+    
+    private bool PlayAnimation()
+    {
+        if (explositionGO != null) return false;
+        return true;
+    }
+
+    private void InputProcessing()
+    {
+        if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
+        if (Input.GetButton("MoveRight")) MovePlayer("MoveRight");
+        if (Input.GetMouseButtonDown(0)) GetComponent<BaseWeaponComponent>().FireStart();
+        if (!_lastMousePosition.Equals(Input.mousePosition))
+        {
+            _controlOnlyKey = false;
+            _lastMousePosition = Input.mousePosition;
+        }
+
+        if (!_controlOnlyKey) RotatePlayerOnMouse();
     }
 
     private void Update()
@@ -27,17 +53,7 @@ public class Player : MonoBehaviour
         }
 
         transform.localPosition = AutoTeleport.Teleport(transform.localPosition, _CanvasRect);
-
-        if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
-        if (Input.GetButton("MoveRight")) MovePlayer("MoveRight");
-        if (Input.GetMouseButtonDown(0)) GetComponent<BaseWeaponComponent>().FireStart();
-        if (!_lastMousePosition.Equals(Input.mousePosition))
-        {
-            _controlOnlyKey = false;
-            _lastMousePosition = Input.mousePosition;
-        }
-
-        if (!_controlOnlyKey) RotatePlayerOnMouse();
+        if (PlayAnimation()) InputProcessing();
     }
 
     private void RotatePlayerOnMouse()
@@ -76,11 +92,26 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D obj)
     {
-        if (obj.gameObject.tag.Equals("Asteroid")) _healthComponents.DecHealth();
+        if (obj.gameObject.tag.Equals("Asteroid"))
+        {
+            _healthComponents.DecHealth();
+            explositionGO = Instantiate(_explosionPrefab, transform);
+            explositionGO.transform.localPosition = new Vector3(0, 0, -2);
+            GetComponent<Collider2D>().enabled = false;
+            Invoke("EndExplositionAnim", _deadAnimDuration);
+        }
+    }
+
+    private void EndExplositionAnim()
+    {
+        Destroy(explositionGO);
+        transform.localPosition = new Vector3(0, 0, -1);
+        GetComponent<PolygonCollider2D>().enabled = true;
     }
 
     private void PlayerDead()
     {
+        if (PlayAnimation()) return;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
