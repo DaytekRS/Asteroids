@@ -14,4 +14,15 @@ public class AutoTeleport : MonoBehaviour
         
         return position;
     }
+    
+    public static Transform FindGameCanvas(Transform obj)
+    {
+        Transform canvas = obj.parent;
+        while (canvas&& !canvas.tag.Equals("GameCanvas") )
+        {
+            canvas = canvas.parent;
+        }
+        
+        return canvas;
+    }
 }

@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 101, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &185390132220655056
@@ -106,8 +106,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speedMax: 5
-  _speedMin: 3
+  _speedMin: 1
   _asteroidDatas:
   - {fileID: 9100827134442838410, guid: b1cdc85f2fb7c714489725767977fe43, type: 3}
   - {fileID: 8326282502674803947, guid: 972588c7975803c40b92c885931f4620, type: 3}
   _asteroidType: 0
+  _autoGenerate: 1
