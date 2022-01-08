@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     private Vector3 _lastMousePosition;
     private Rect _CanvasRect;
 
-    private void Awake()
+    private void Start()
     {
         _CanvasRect = transform.parent.GetComponent<RectTransform>().rect;
     }
