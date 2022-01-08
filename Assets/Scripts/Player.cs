@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private HealthComponents _healthComponents;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private float _deadAnimDuration = 0.3f;
+    [SerializeField] private AudioClip _explosionSound;
     private bool _controlOnlyKey = true;
     private Vector3 _lastMousePosition;
     private Rect _CanvasRect;
@@ -98,6 +99,9 @@ public class Player : MonoBehaviour
             explositionGO = Instantiate(_explosionPrefab, transform);
             explositionGO.transform.localPosition = new Vector3(0, 0, -2);
             GetComponent<Collider2D>().enabled = false;
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.clip = _explosionSound;
+            audioSource.Play();
             Invoke("EndExplositionAnim", _deadAnimDuration);
         }
     }
