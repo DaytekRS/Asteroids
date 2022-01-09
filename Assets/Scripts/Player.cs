@@ -91,6 +91,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void EndExplositionAnim()
+    {
+        Destroy(explositionGO);
+        transform.localPosition = new Vector3(0, 0, -1);
+        GetComponent<PolygonCollider2D>().enabled = true;
+    }
+
+    private void PlayerDead()
+    {
+        if (PlayAnimation()) return;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+    
     private void OnCollisionEnter2D(Collision2D obj)
     {
         if (obj.gameObject.tag.Equals("Asteroid"))
@@ -105,17 +118,12 @@ public class Player : MonoBehaviour
             Invoke("EndExplositionAnim", _deadAnimDuration);
         }
     }
-
-    private void EndExplositionAnim()
+    
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        Destroy(explositionGO);
-        transform.localPosition = new Vector3(0, 0, -1);
-        GetComponent<PolygonCollider2D>().enabled = true;
-    }
-
-    private void PlayerDead()
-    {
-        if (PlayAnimation()) return;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (collider.tag.Equals("HealthBonus"))
+        {
+            _healthComponents.IncHealth();
+        }
     }
 }

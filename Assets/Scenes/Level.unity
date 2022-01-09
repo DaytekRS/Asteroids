@@ -986,6 +986,7 @@ MonoBehaviour:
   _healthComponents: {fileID: 396108573}
   _explosionPrefab: {fileID: 1826022030517116096, guid: 17bff800a5d03324dbe3f603824337ff, type: 3}
   _deadAnimDuration: 0.3
+  _explosionSound: {fileID: 0}
 --- !u!114 &1770336803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -999,6 +1000,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7055263865088742362, guid: 7e29b91e2bd427e4a8b4bc519f50af86, type: 3}
+  _laserSounds:
+  - {fileID: 8300000, guid: 0510ca61586a0c7438cf8713552f823f, type: 3}
+  - {fileID: 8300000, guid: d8c1bb93a196b5b4c96125306fdd7353, type: 3}
 --- !u!1 &1770446829
 GameObject:
   m_ObjectHideFlags: 0

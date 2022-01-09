@@ -76,6 +76,7 @@ public class Asteroid : MonoBehaviour
     {
         GetComponent<Image>().enabled = false;
         GetComponent<CapsuleCollider2D>().enabled = false;
+        GetComponent<BonusSpawner>().SpawnBonus();
         Destroy(gameObject, hitSound.length);
     }
 
