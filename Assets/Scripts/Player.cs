@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private float _deadAnimDuration = 0.3f;
     [SerializeField] private AudioClip _explosionSound;
+    [SerializeField] private AudioClip _bonusUpSound;
     private bool _controlOnlyKey = true;
     private Vector3 _lastMousePosition;
     private Rect _CanvasRect;
@@ -124,6 +125,9 @@ public class Player : MonoBehaviour
         if (collider.tag.Equals("HealthBonus"))
         {
             _healthComponents.IncHealth();
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.clip = _bonusUpSound;
+            audioSource.Play();
         }
     }
 }
