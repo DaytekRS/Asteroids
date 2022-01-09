@@ -8,6 +8,8 @@ TagManager:
   - GameCanvas
   - Bullet
   - HealthBonus
+  - ShieldBonus
+  - Bonus
   layers:
   - Default
   - TransparentFX

@@ -281,5 +281,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Bonuses:
-  - {fileID: 9034201269225154078, guid: d7c1798c97c854648b2e7ad7d2be363c, type: 3}
+  - {fileID: 1407253385877599550, guid: d7c1798c97c854648b2e7ad7d2be363c, type: 3}
+  - {fileID: 1065413327389438226, guid: 4b7ff6510462b4e4a81623dc342d5536, type: 3}
   BonusProcent: 10

@@ -14,7 +14,9 @@ public class BonusSpawner : MonoBehaviour
         Transform canvas = AutoTeleport.FindGameCanvas(transform);
         if (canvas)
         {
-            int index = Random.Range(0, Bonuses.Length - 1);
+            print(Bonuses.Length - 1);
+            int index = Random.Range(0, Bonuses.Length);
+            print(index);
             GameObject bonus = Instantiate(Bonuses[index], canvas);
             bonus.transform.localPosition = transform.localPosition;
             print(transform.gameObject.name);

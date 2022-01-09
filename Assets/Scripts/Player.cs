@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speedRotate = 400f;
     [SerializeField] private HealthComponents _healthComponents;
     [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private GameObject _shieldPrefab;
     [SerializeField] private float _deadAnimDuration = 0.3f;
     [SerializeField] private AudioClip _explosionSound;
     [SerializeField] private AudioClip _bonusUpSound;
@@ -18,14 +19,15 @@ public class Player : MonoBehaviour
     private Rect _CanvasRect;
 
     private GameObject explositionGO;
+    private GameObject shield;
 
     private void Start()
     {
         _CanvasRect = transform.parent.GetComponent<RectTransform>().rect;
+        ActivateShield();
     }
 
-    
-    
+
     private bool PlayAnimation()
     {
         if (explositionGO != null) return false;
@@ -97,6 +99,7 @@ public class Player : MonoBehaviour
         Destroy(explositionGO);
         transform.localPosition = new Vector3(0, 0, -1);
         GetComponent<PolygonCollider2D>().enabled = true;
+        ActivateShield();
     }
 
     private void PlayerDead()
@@ -104,10 +107,10 @@ public class Player : MonoBehaviour
         if (PlayAnimation()) return;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-    
+
     private void OnCollisionEnter2D(Collision2D obj)
     {
-        if (obj.gameObject.tag.Equals("Asteroid"))
+        if (shield == null && obj.gameObject.tag.Equals("Asteroid"))
         {
             _healthComponents.DecHealth();
             explositionGO = Instantiate(_explosionPrefab, transform);
@@ -119,15 +122,28 @@ public class Player : MonoBehaviour
             Invoke("EndExplositionAnim", _deadAnimDuration);
         }
     }
-    
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.tag.Equals("HealthBonus"))
+        if (collider.tag.Contains("Bonus"))
         {
-            _healthComponents.IncHealth();
             AudioSource audioSource = GetComponent<AudioSource>();
             audioSource.clip = _bonusUpSound;
             audioSource.Play();
+            switch (collider.tag)
+            {
+                case "HealthBonus":
+                    _healthComponents.IncHealth();
+                    break;
+                case "ShieldBonus":
+                    ActivateShield();
+                    break;
+            }
         }
+    }
+
+    private void ActivateShield()
+    {
+        shield = Instantiate(_shieldPrefab, transform);
     }
 }

@@ -3,7 +3,12 @@ guid: 6ba75937afac70e4197c8e5321ec4661
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _healthComponents: {instanceID: 0}
+  - _explosionPrefab: {fileID: 1826022030517116096, guid: 17bff800a5d03324dbe3f603824337ff, type: 3}
+  - _shieldPrefab: {fileID: 5058433358482075258, guid: 5cdd0566568d6014ba4916f294871307, type: 3}
+  - _explosionSound: {fileID: 8300000, guid: 89a9987b39ee8b24ab3ea35b411d3b21, type: 3}
+  - _bonusUpSound: {fileID: 8300000, guid: 9f209280a00c97745925582e5e21dae4, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
