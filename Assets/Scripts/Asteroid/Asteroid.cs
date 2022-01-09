@@ -68,11 +68,15 @@ public class Asteroid : MonoBehaviour
             audioSource.Play();
             GetComponent<HealthComponents>().DecHealth();
             Invoke("EndHitAnim", _hitAnimDuration);
-            if (GetComponent<HealthComponents>().IsDead())
-            {
-                Destroy(gameObject);
-            }
+            if (GetComponent<HealthComponents>().IsDead()) OnDead();
         }
+    }
+
+    private void OnDead()
+    {
+        GetComponent<Image>().enabled = false;
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        Destroy(gameObject, hitSound.length);
     }
 
     private void EndHitAnim()
