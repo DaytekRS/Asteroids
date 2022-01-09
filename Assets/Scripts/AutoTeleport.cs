@@ -25,4 +25,5 @@ public class AutoTeleport : MonoBehaviour
 
         return canvas;
     }
+    
 }

@@ -29,6 +29,7 @@ public class BaseWeaponComponent : MonoBehaviour
             GameObject obj = Instantiate(bulletPrefab, canvas);
             obj.transform.localPosition = transform.localPosition;
             obj.transform.up = transform.up;
+            obj.GetComponent<Bullet>().owner = transform;
             _audioSource.clip = _laserSounds[_laserSoundsIndex];
             _audioSource.Play();
             _laserSoundsIndex = (int) Mathf.Repeat(++_laserSoundsIndex, _laserSounds.Length);

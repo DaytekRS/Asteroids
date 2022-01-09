@@ -47,7 +47,7 @@ public class Asteroid : MonoBehaviour
         }
     }
 
-    private void SetAsteroidData(AsteroidData asteroidData)
+    public void SetAsteroidData(AsteroidData asteroidData)
     {
         if (asteroidData == null) return;
         int index = Random.Range(0, asteroidData.GetSprites(_asteroidType).Length);
@@ -68,7 +68,12 @@ public class Asteroid : MonoBehaviour
             audioSource.Play();
             GetComponent<HealthComponents>().DecHealth();
             Invoke("EndHitAnim", _hitAnimDuration);
-            if (GetComponent<HealthComponents>().IsDead()) OnDead();
+            if (GetComponent<HealthComponents>().IsDead())
+            {
+                Transform bulletOwner = collider.GetComponent<Bullet>().owner;
+                bulletOwner.GetComponent<ScoreСomponent>().AddScore(GetAsteroidPoints());
+                OnDead();
+            }
         }
     }
 
@@ -89,5 +94,10 @@ public class Asteroid : MonoBehaviour
     {
         SetRandomAsteroid();
         ForwardVector = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
+    }
+
+    public uint GetAsteroidPoints()
+    {
+        return _currentAsteroidData.GetPoints(_asteroidType);
     }
 }

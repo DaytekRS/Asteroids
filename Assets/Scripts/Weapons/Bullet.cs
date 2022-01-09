@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private Sprite _BulletSprite;
     [SerializeField] private int _BulletSpeed = 10;
+    public Transform owner;
     private Rect _CanvasRect;
 
     private void Awake()
