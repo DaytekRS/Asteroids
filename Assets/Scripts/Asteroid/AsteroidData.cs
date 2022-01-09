@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum AsteroidType
+public class AsteroidType
 {
-    Big,
-    Med,
-    Small,
-    Tiny
+    public const uint Big = 0;
+    public const uint Med = 1;
+    public const uint Small = 2;
+    public const uint Tiny = 3;
+    public const uint CountType = 4;
 }
 
 public class AsteroidData : MonoBehaviour
@@ -21,12 +22,17 @@ public class AsteroidData : MonoBehaviour
     [SerializeField] private uint PointsDestroySmall = 40;
     [SerializeField] private uint PointsDestroyTiny = 80;
     
-    [SerializeField] private int HealthBig = 4;
-    [SerializeField] private int HealthMed = 3;
-    [SerializeField] private int HealthSmall = 2;
-    [SerializeField] private int HealthTiny = 1;
+    [SerializeField] private uint HealthBig = 4;
+    [SerializeField] private uint HealthMed = 3;
+    [SerializeField] private uint HealthSmall = 2;
+    [SerializeField] private uint HealthTiny = 1;
+    
+    [SerializeField] private uint CountsShardsBig = 3;
+    [SerializeField] private uint CountsShardsMed = 2;
+    [SerializeField] private uint CountsShardsSmall = 1;
+    [SerializeField] private uint CountsShardsTiny = 0;
 
-    public Sprite [] GetSprites(AsteroidType asteroidType)
+    public Sprite [] GetSprites(uint asteroidType)
     {
         switch (asteroidType)
         {
@@ -43,7 +49,7 @@ public class AsteroidData : MonoBehaviour
         return Big;
     }
     
-    public uint GetPoints(AsteroidType asteroidType)
+    public uint GetPoints(uint asteroidType)
     {
         switch (asteroidType)
         {
@@ -57,10 +63,10 @@ public class AsteroidData : MonoBehaviour
                 return PointsDestroyTiny;
         }
 
-        return PointsDestroyBig;
+        return 0;
     }
 
-    public float GetHealths(AsteroidType asteroidType)
+    public uint GetHealths(uint asteroidType)
     {
         switch (asteroidType)
         {
@@ -74,7 +80,23 @@ public class AsteroidData : MonoBehaviour
                 return HealthTiny;
         }
 
-        return PointsDestroyBig;
+        return 0;
+    }
+    
+    public uint GetCountShards(uint asteroidType)
+    {
+        switch (asteroidType)
+        {
+            case AsteroidType.Big:
+                return CountsShardsBig;
+            case AsteroidType.Med:
+                return CountsShardsMed;
+            case AsteroidType.Small:
+                return CountsShardsSmall;
+            case AsteroidType.Tiny:
+                return CountsShardsTiny;
+        }
+        return 0;
     }
     
 }

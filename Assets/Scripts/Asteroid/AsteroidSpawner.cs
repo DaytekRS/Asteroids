@@ -16,7 +16,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     private void Update()
     {
-        while (transform.childCount != _minCountAsteroid)
+        while (transform.childCount < _minCountAsteroid)
         {
             GameObject obj = Instantiate(asteroidPrefab, transform);
             obj.transform.localPosition = RandomLocalPosition();

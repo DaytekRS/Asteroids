@@ -22,7 +22,6 @@ public class AutoTeleport : MonoBehaviour
         {
             canvas = canvas.parent;
         }
-
         return canvas;
     }
     

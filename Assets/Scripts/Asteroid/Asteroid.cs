@@ -7,7 +7,7 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private float _speedMax = 5f;
     [SerializeField] private float _speedMin = 3f;
     [SerializeField] private AsteroidData[] _asteroidDatas = { };
-    [SerializeField] private AsteroidType _asteroidType = AsteroidType.Big;
+    [SerializeField] public uint _asteroidType = AsteroidType.Big;
     [SerializeField] private bool _autoGenerate = true;
     [SerializeField] private float _hitAnimDuration = 0.3f;
     [SerializeField] private AudioClip hitSound;
@@ -15,7 +15,7 @@ public class Asteroid : MonoBehaviour
     private Vector3 ForwardVector = Vector3.zero;
     private Rect _CanvasRect;
     private float _speed;
-    private AsteroidData _currentAsteroidData;
+    public AsteroidData _currentAsteroidData;
 
 
     private void Start()
@@ -51,6 +51,7 @@ public class Asteroid : MonoBehaviour
         GetComponent<Image>().sprite = sprite;
         GetComponent<RectTransform>().sizeDelta = sprite.textureRect.size;
         GetComponent<CapsuleCollider2D>().size = sprite.textureRect.size;
+        _currentAsteroidData = asteroidData;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -75,10 +76,13 @@ public class Asteroid : MonoBehaviour
 
     private void OnDead()
     {
+        DecayOnShards();
         GetComponent<Image>().enabled = false;
         GetComponent<CapsuleCollider2D>().enabled = false;
         GetComponent<BonusSpawner>().SpawnBonus();
+        //transform.parent.GetComponent<AsteroidSpawner>().DecayOnShards(this);
         Destroy(gameObject, hitSound.length);
+       
     }
 
     private void EndHitAnim()
@@ -96,4 +100,20 @@ public class Asteroid : MonoBehaviour
     {
         return _currentAsteroidData.GetPoints(_asteroidType);
     }
+    
+    public void DecayOnShards()
+    {
+        if (_asteroidType < AsteroidType.CountType - 1)
+        {
+            uint newAsteroidType = _asteroidType + 1;
+            for (int i = 0; i < _currentAsteroidData.GetCountShards(_asteroidType); i++)
+            {
+                GameObject obj = Instantiate(gameObject, transform.parent);
+                obj.transform.localPosition = transform.localPosition;
+                obj.GetComponent<Asteroid>()._asteroidType = newAsteroidType;
+                obj.GetComponent<Asteroid>().SetAsteroidData(_currentAsteroidData);
+            }
+        }
+    }
+    
 }
