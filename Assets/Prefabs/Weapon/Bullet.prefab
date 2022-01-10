@@ -129,8 +129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2063fb4fc8efd754ea74432a2927eb2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _BulletSprite: {fileID: 21300000, guid: 382dc784e108443498eb4b18e49ad35a, type: 3}
-  _BulletSpeed: 20
+  _bulletSprite: {fileID: 21300000, guid: 382dc784e108443498eb4b18e49ad35a, type: 3}
+  _bulletSpeed: 10
 --- !u!222 &7768215964335120703
 CanvasRenderer:
   m_ObjectHideFlags: 0

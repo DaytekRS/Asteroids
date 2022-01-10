@@ -8,32 +8,27 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float _speedForward = 10f;
     [SerializeField] private float _speedRotate = 400f;
-    [SerializeField] private HealthComponents _healthComponents;
-    [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private GameObject _shieldPrefab;
-    [SerializeField] private float _deadAnimDuration = 0.3f;
-    [SerializeField] private AudioClip _explosionSound;
     [SerializeField] private AudioClip _bonusUpSound;
+
     private bool _controlOnlyKey = true;
     private Vector3 _lastMousePosition;
-    private Rect _CanvasRect;
-
-    private GameObject explositionGO;
-    private GameObject shield;
+    private Rect _canvasRect;
+    private GameObject _shield;
 
     private void Start()
     {
-        _CanvasRect = transform.parent.GetComponent<RectTransform>().rect;
+        _canvasRect = transform.parent.GetComponent<RectTransform>().rect;
         ActivateShield();
     }
 
 
-    private bool PlayAnimation()
+    private bool AnimationNotPlayNow()
     {
-        if (explositionGO != null) return false;
-        return true;
+        return !GetComponent<ExplositionComponent>().NowPlayExplosition();
     }
 
+    //handling player input 
     private void InputProcessing()
     {
         if (Input.GetButton("MoveForward")) MovePlayer("MoveForward");
@@ -50,14 +45,14 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (_healthComponents.IsDead())
+        if (GetComponent<HealthComponents>().IsDead())
         {
             PlayerDead();
             return;
         }
 
-        transform.localPosition = AutoTeleport.Teleport(transform.localPosition, _CanvasRect);
-        if (PlayAnimation()) InputProcessing();
+        transform.localPosition = Utils.WrapScreen(transform.localPosition, _canvasRect);
+        if (AnimationNotPlayNow()) InputProcessing();
     }
 
     private void RotatePlayerOnMouse()
@@ -94,32 +89,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void EndExplositionAnim()
-    {
-        Destroy(explositionGO);
-        transform.localPosition = new Vector3(0, 0, -1);
-        GetComponent<PolygonCollider2D>().enabled = true;
-        ActivateShield();
-    }
-
     private void PlayerDead()
     {
-        if (PlayAnimation()) return;
+        if (AnimationNotPlayNow()) return;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private void OnCollisionEnter2D(Collision2D obj)
     {
-        if (shield == null && obj.gameObject.tag.Equals("Asteroid"))
+        if (_shield == null && obj.gameObject.tag.Equals("Asteroid"))
         {
-            _healthComponents.DecHealth();
-            explositionGO = Instantiate(_explosionPrefab, transform);
-            explositionGO.transform.localPosition = new Vector3(0, 0, -2);
+            GetComponent<HealthComponents>().DecHealth();
+            GetComponent<ExplositionComponent>().StartPlayExplosition();
             GetComponent<Collider2D>().enabled = false;
-            AudioSource audioSource = GetComponent<AudioSource>();
-            audioSource.clip = _explosionSound;
-            audioSource.Play();
-            Invoke("EndExplositionAnim", _deadAnimDuration);
         }
     }
 
@@ -127,13 +109,11 @@ public class Player : MonoBehaviour
     {
         if (collider.tag.Contains("Bonus"))
         {
-            AudioSource audioSource = GetComponent<AudioSource>();
-            audioSource.clip = _bonusUpSound;
-            audioSource.Play();
+            Utils.PlayAudio(GetComponent<AudioSource>(), _bonusUpSound);
             switch (collider.tag)
             {
                 case "HealthBonus":
-                    _healthComponents.IncHealth();
+                    GetComponent<HealthComponents>().IncHealth();
                     break;
                 case "ShieldBonus":
                     ActivateShield();
@@ -142,8 +122,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void ActivateShield()
+    public void ActivateShield()
     {
-        shield = Instantiate(_shieldPrefab, transform);
+        _shield = Instantiate(_shieldPrefab, transform);
     }
 }

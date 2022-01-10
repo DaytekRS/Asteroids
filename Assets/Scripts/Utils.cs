@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoTeleport : MonoBehaviour
+public class Utils : MonoBehaviour
 {
-    public static Vector3 Teleport(Vector3 position, Rect rectTeleport)
+    //if you go beyond the screen, give the opposite position 
+    public static Vector3 WrapScreen(Vector3 position, Rect rectTeleport)
     {
         if (position.x < rectTeleport.x) position.x += rectTeleport.width;
         else if (position.x > rectTeleport.xMax) position.x -= rectTeleport.width;
@@ -14,15 +15,21 @@ public class AutoTeleport : MonoBehaviour
 
         return position;
     }
-
-    public static Transform FindGameCanvas(Transform obj)
+    
+    //finds a link to root by tag 
+    public static Transform FindRootWithTag(Transform obj, string tag)
     {
         Transform canvas = obj.parent;
-        while (canvas && !canvas.tag.Equals("GameCanvas"))
+        while (canvas && !canvas.tag.Equals(tag))
         {
             canvas = canvas.parent;
         }
         return canvas;
     }
-    
+
+    public static void PlayAudio(AudioSource audioSource, AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        audioSource.Play();
+    }
 }

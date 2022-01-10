@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 185390132220655084}
-  - component: {fileID: 185390132220655056}
   - component: {fileID: 185390132220655059}
   - component: {fileID: 185390132220655058}
   - component: {fileID: 7510906064260811884}
@@ -18,6 +17,7 @@ GameObject:
   - component: {fileID: 185390132220655085}
   - component: {fileID: 9076605324769226770}
   - component: {fileID: -1749446300068398285}
+  - component: {fileID: 185390132220655056}
   m_Layer: 5
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -44,14 +44,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 101, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &185390132220655056
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185390132220655087}
-  m_CullTransparentMesh: 1
 --- !u!114 &185390132220655059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,15 +238,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e746b472f6f5b34f9eca063bf57aa4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spritesAsteroid:
+  - {fileID: 21300000, guid: 617573303dc3806498bbae3b184bc0fb, type: 3}
+  - {fileID: 21300000, guid: 46dd1516f1a487d4dbd458a70eefa50c, type: 3}
+  - {fileID: 21300000, guid: fa90efcd4ef4e684897c07308b401874, type: 3}
+  - {fileID: 21300000, guid: 2c09d7b5ce2e3ea45819be586ab5efd2, type: 3}
   _speedMax: 5
   _speedMin: 1
-  _asteroidDatas:
-  - {fileID: 9100827134442838410, guid: b1cdc85f2fb7c714489725767977fe43, type: 3}
-  - {fileID: 8326282502674803947, guid: 972588c7975803c40b92c885931f4620, type: 3}
-  _asteroidType: 0
-  _autoGenerate: 1
+  _destroyPoints: 10
+  _hitSound: {fileID: 8300000, guid: 773dee3fb3b212a40b442ad5f75184d5, type: 3}
   _hitAnimDuration: 0.3
-  hitSound: {fileID: 8300000, guid: 773dee3fb3b212a40b442ad5f75184d5, type: 3}
+  _countDecayShardsAsteroid: 3
+  _prefabShard: {fileID: 185390132220655087}
 --- !u!114 &9076605324769226770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819108f05f362f54692272e9aa252742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 3
+  _maxHealth: 3
 --- !u!114 &-1749446300068398285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,7 +275,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d3cddd582e3ed4fa067231e301f7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bonuses:
+  _bonuses:
   - {fileID: 1407253385877599550, guid: d7c1798c97c854648b2e7ad7d2be363c, type: 3}
   - {fileID: 1065413327389438226, guid: 4b7ff6510462b4e4a81623dc342d5536, type: 3}
-  BonusProcent: 10
+  _bonusProcent: 10
+--- !u!222 &185390132220655056
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185390132220655087}
+  m_CullTransparentMesh: 1

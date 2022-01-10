@@ -1,25 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class BonusSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject[] Bonuses;
-    [SerializeField] private int BonusProcent;
+    [SerializeField] private GameObject[] _bonuses;
+    [Range(0, 100)] [SerializeField] private int _bonusProcent;
+    [SerializeField] private string _rootCanvasTag = "GameCanvas";
 
     public void SpawnBonus()
     {
-        if (Random.Range(0, 100) > BonusProcent) return;
-        Transform canvas = AutoTeleport.FindGameCanvas(transform);
+        if (Random.Range(0, 100) > _bonusProcent) return;
+        Transform canvas = Utils.FindRootWithTag(transform, _rootCanvasTag);
         if (canvas)
         {
-            print(Bonuses.Length - 1);
-            int index = Random.Range(0, Bonuses.Length);
-            print(index);
-            GameObject bonus = Instantiate(Bonuses[index], canvas);
+            int index = Random.Range(0, _bonuses.Length);
+            GameObject bonus = Instantiate(_bonuses[index], canvas);
             bonus.transform.localPosition = transform.localPosition;
-            print(transform.gameObject.name);
         }
     }
 }

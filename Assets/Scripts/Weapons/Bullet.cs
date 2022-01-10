@@ -6,33 +6,33 @@ using UnityEngine.UI;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private Sprite _BulletSprite;
-    [SerializeField] private int _BulletSpeed = 10;
-    public Transform owner;
-    private Rect _CanvasRect;
+    [SerializeField] private Sprite _bulletSprite;
+    [SerializeField] private int _bulletSpeed = 10;
+    private Transform _owner;
+    private Rect _canvasRect;
 
     private void Awake()
     {
         Image image = GetComponent<Image>();
-        image.sprite = _BulletSprite;
+        image.sprite = _bulletSprite;
         
         RectTransform recTransform = GetComponent<RectTransform>();
-        recTransform.sizeDelta = _BulletSprite.textureRect.size;
+        recTransform.sizeDelta = _bulletSprite.textureRect.size;
 
         BoxCollider2D collider = GetComponent<BoxCollider2D>();
-        collider.size = _BulletSprite.textureRect.size;
+        collider.size = _bulletSprite.textureRect.size;
 
-        _CanvasRect = transform.parent.GetComponent<RectTransform>().rect;
+        _canvasRect = transform.parent.GetComponent<RectTransform>().rect;
     }
 
     private void Start()
     {
-        GetComponent<Rigidbody2D>().velocity = transform.up * _BulletSpeed;
+        GetComponent<Rigidbody2D>().velocity = transform.up * _bulletSpeed;
     }
 
     private void Update()
     {
-        if (!_CanvasRect.Contains(transform.localPosition)) Destroy(gameObject);
+        if (!_canvasRect.Contains(transform.localPosition)) Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -41,5 +41,15 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void SetOwner(Transform owner)
+    {
+        _owner = owner;
+    }
+    
+    public Transform GetOwner()
+    {
+        return _owner;
     }
 }

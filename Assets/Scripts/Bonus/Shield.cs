@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Shield : MonoBehaviour
 {
-    [SerializeField] private float ShieldTimeLife = 5f;
+    [Tooltip("Working hours shield in sec")] [Range(0, 100)] [SerializeField]
+    private float _shieldTimeLife = 5f;
 
     void Start()
     {
-        Invoke("OnTimeLeft", ShieldTimeLife);
+        Invoke("OnTimeLeft", _shieldTimeLife);
     }
 
-    
     private void OnTimeLeft()
     {
         Destroy(gameObject);

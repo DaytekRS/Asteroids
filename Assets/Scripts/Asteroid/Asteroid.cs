@@ -4,85 +4,84 @@ using Random = UnityEngine.Random;
 
 public class Asteroid : MonoBehaviour
 {
-    [SerializeField] private float _speedMax = 5f;
+    [Header("Display")] 
+    [SerializeField] private Sprite[] _spritesAsteroid;
+    [SerializeField] private string _rootCanvasTag = "GameCanvas";
+
+    [Header("Movement Settings")] [SerializeField]
+    private float _speedMax = 5f;
+
     [SerializeField] private float _speedMin = 3f;
-    [SerializeField] private AsteroidData[] _asteroidDatas = { };
-    [SerializeField] public uint _asteroidType = AsteroidType.Big;
-    [SerializeField] private bool _autoGenerate = true;
+
+    [Header("Score system")] [SerializeField]
+    private uint _destroyPoints = 10;
+
+    [Header("Hit Settings")] [SerializeField]
+    private AudioClip _hitSound;
+
     [SerializeField] private float _hitAnimDuration = 0.3f;
-    [SerializeField] private AudioClip hitSound;
 
-    private Vector3 ForwardVector = Vector3.zero;
-    private Rect _CanvasRect;
+    [Header("Decay asteroid on shards")] [SerializeField]
+    private float _countDecayShardsAsteroid = 3f;
+
+    [SerializeField] private GameObject _prefabShard;
+
+
+    private Vector3 _forwardVector = Vector3.zero;
+    private Rect _canvasRect;
     private float _speed;
-    public AsteroidData _currentAsteroidData;
-
 
     private void Start()
     {
-        if (_autoGenerate) AutoGenerateAsteroid();
-        SetAsteroidData(_currentAsteroidData);
+        AutoGenerateAsteroid();
         _speed = Random.Range(_speedMin, _speedMax);
-        Transform canvas = AutoTeleport.FindGameCanvas(transform);
-        if (canvas) _CanvasRect = canvas.GetComponent<RectTransform>().rect;
+        Transform canvas = Utils.FindRootWithTag(transform, _rootCanvasTag);
+        if (canvas) _canvasRect = canvas.GetComponent<RectTransform>().rect;
     }
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + ForwardVector,
-            Time.deltaTime * _speed);
-        transform.localPosition = AutoTeleport.Teleport(transform.localPosition, _CanvasRect);
+        MoveAsteroid();
     }
 
-    private void SetRandomAsteroid()
+    private void SetRandomAsteroidSprite()
     {
-        if (_asteroidDatas.Length > 0)
-        {
-            int index = Random.Range(0, _asteroidDatas.Length);
-            _currentAsteroidData = _asteroidDatas[index];
-        }
-    }
+        if (_spritesAsteroid.Length == 0) return;
 
-    public void SetAsteroidData(AsteroidData asteroidData)
-    {
-        if (asteroidData == null) return;
-        int index = Random.Range(0, asteroidData.GetSprites(_asteroidType).Length);
-        Sprite sprite = asteroidData.GetSprites(_asteroidType)[index];
+        int index = Random.Range(0, _spritesAsteroid.Length);
+        Sprite sprite = _spritesAsteroid[index];
         GetComponent<Image>().sprite = sprite;
         GetComponent<RectTransform>().sizeDelta = sprite.textureRect.size;
         GetComponent<CapsuleCollider2D>().size = sprite.textureRect.size;
-        _currentAsteroidData = asteroidData;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        print(collider);
+        //Handles the match with the bullet
         if (collider.tag.Equals("Bullet"))
         {
-            GetComponent<Animator>().SetBool("HaveHit", true);
-            AudioSource audioSource = GetComponent<AudioSource>();
-            audioSource.clip = hitSound;
-            audioSource.Play();
+            Utils.PlayAudio(GetComponent<AudioSource>(), _hitSound);
             GetComponent<HealthComponents>().DecHealth();
-            Invoke("EndHitAnim", _hitAnimDuration);
             if (GetComponent<HealthComponents>().IsDead())
             {
-                Transform bulletOwner = collider.GetComponent<Bullet>().owner;
-                bulletOwner.GetComponent<ScoreСomponent>().AddScore(GetAsteroidPoints());
+                Transform bulletOwner = collider.GetComponent<Bullet>().GetOwner();
+                bulletOwner.GetComponent<ScoreСomponent>().AddScore(_destroyPoints);
                 OnDead();
+            }
+            else
+            {
+                GetComponent<Animator>().SetBool("HaveHit", true);
+                Invoke("EndHitAnim", _hitAnimDuration);
             }
         }
     }
 
     private void OnDead()
     {
+        EnabledComponents(false); //disable so that he could not contact objects until he is destroyed 
         DecayOnShards();
-        GetComponent<Image>().enabled = false;
-        GetComponent<CapsuleCollider2D>().enabled = false;
         GetComponent<BonusSpawner>().SpawnBonus();
-        //transform.parent.GetComponent<AsteroidSpawner>().DecayOnShards(this);
-        Destroy(gameObject, hitSound.length);
-       
+        Destroy(gameObject, _hitSound.length);
     }
 
     private void EndHitAnim()
@@ -92,28 +91,31 @@ public class Asteroid : MonoBehaviour
 
     private void AutoGenerateAsteroid()
     {
-        SetRandomAsteroid();
-        ForwardVector = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
-    }
-
-    public uint GetAsteroidPoints()
-    {
-        return _currentAsteroidData.GetPoints(_asteroidType);
+        SetRandomAsteroidSprite();
+        _forwardVector = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
     }
     
-    public void DecayOnShards()
+    //Splits an asteroid into shards
+    private void DecayOnShards()
     {
-        if (_asteroidType < AsteroidType.CountType - 1)
+        if (_prefabShard == null) return;
+        for (int i = 0; i < _countDecayShardsAsteroid; i++)
         {
-            uint newAsteroidType = _asteroidType + 1;
-            for (int i = 0; i < _currentAsteroidData.GetCountShards(_asteroidType); i++)
-            {
-                GameObject obj = Instantiate(gameObject, transform.parent);
-                obj.transform.localPosition = transform.localPosition;
-                obj.GetComponent<Asteroid>()._asteroidType = newAsteroidType;
-                obj.GetComponent<Asteroid>().SetAsteroidData(_currentAsteroidData);
-            }
+            GameObject obj = Instantiate(_prefabShard, transform.parent);
+            obj.transform.localPosition = transform.localPosition;
         }
     }
-    
+
+    private void MoveAsteroid()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + _forwardVector,
+            Time.deltaTime * _speed);
+        transform.localPosition = Utils.WrapScreen(transform.localPosition, _canvasRect);
+    }
+
+    private void EnabledComponents(bool enabled)
+    {
+        GetComponent<Image>().enabled = enabled;
+        GetComponent<CapsuleCollider2D>().enabled = enabled;
+    }
 }
